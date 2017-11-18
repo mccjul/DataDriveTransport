@@ -1,4 +1,10 @@
-#Created by Kevin
+_author_ = Kevin
 
 class BikePost():
-    def_init_(self, list):
+    def __init__(self):
+        # Individual ID of the bike post
+        self.id = 0
+        self.stationName = ""
+        self.location = ()
+        self.countStarts = 0
+        self.countStops = 0
