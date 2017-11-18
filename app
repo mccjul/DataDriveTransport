@@ -1,15 +1,16 @@
 import dash
+from dash.dependencies import Input, Output, State, Event
 import dash_core_components as dcc
 import dash_html_components as html
+import plotly.plotly as py
+from plotly import graph_objs as go
+from plotly.graph_objs import *
 
 app = dash.Dash()
 
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),
+mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
-    html.Div(children='''
-        Dash: A web application framework for Python.
-    '''),
+app.layout = html.Div(children=[
 
     dcc.Graph(
         id='example-graph',
@@ -21,6 +22,36 @@ app.layout = html.Div(children=[
             'layout': {
                 'title': 'Dash Data Visualization'
             }
+        }
+    ),
+    dcc.Graph(
+        id='map-graph',
+        figure={
+            'data': [
+                Scattermapbox(
+                    lat=['45.5017'],
+                    lon=['-73.5673'],
+                    mode='markers',
+                    marker=Marker(
+                        size=14
+                    ),
+                    text=['Montreal'],
+                )
+            ],
+            'layout': go.Layout(autosize=True,
+                                height=750,
+                                margin=Margin(l=0, r=0, t=0, b=0),
+                                showlegend=False,
+                                mapbox=dict(
+                                    accesstoken=mapbox_access_token,
+                                    center=dict(
+                                        lat=40.7272,
+                                        lon=-73.991251
+                                    ),
+                                    style='dark',
+                                    bearing=0,
+                                    zoom=12.0
+                                ))
         }
     )
 ])
