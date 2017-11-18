@@ -1,3 +1,4 @@
+# coding=UTF-8
 import dash
 from dash.dependencies import Input, Output, State, Event
 import dash_core_components as dcc
