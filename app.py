@@ -132,37 +132,6 @@ app.layout = html.Div(children=[
         html.Div(
             [
                 dcc.Graph(
-                    id='example-graph1',
-                    figure={
-                        'data': [{
-                            "values": [16, 15, 12, 6, 5, 4, 42],
-                            "labels": [
-                                "US",
-                                "China",
-                                "European Union",
-                                "Russian Federation",
-                                "Brazil",
-                                "India",
-                                "Rest of World"
-                            ],
-                            "domain": {'x': [.5, 1],
-                                       'y': [.51, 1]},
-                            "name": "GHG Emissions",
-                            "hoverinfo": "label+percent+name",
-                            "type": "pie"
-                        }],
-                        'layout': {
-                            'title': 'Chart 1',
-                            'margin': dict(
-                                l=0,
-                                r=0,
-                                b=0,
-                                t=30),
-                            'height': 295
-                        }
-                    }
-                ),
-                dcc.Graph(
                     id='example-graph2',
                     figure={
                         'data': [
@@ -205,79 +174,9 @@ app.layout = html.Div(children=[
             ],
             className='four columns', style={'margin-top': '10', 'height': 500}
         )
-    ], className='row'),
-    html.Div([
-        dcc.Slider(
-            id="month-slider",
-            min=0,
-            max=9,
-            marks={i: 'Label {}'.format(i) for i in range(10)},
-            value=month,
-        )
-    ], style={'margin-left': 20, 'margin-right': 20, 'margin-top': 40})
+    ], className='row')
 ])
 
-
-@app.callback(Output('map-graph', 'figure'), [Input('month-slider', 'value')], [State('month-slider', 'value')])
-def updateMapPerMonth(trigger, value):
-    print(value)
-    return {
-        'data': data,
-        'layout': go.Layout(
-            autosize=True,
-            height=600,
-            width=900,
-            margin=dict(l=0, r=0, b=0, t=0),
-            showlegend=False,
-            hovermode='closest',
-            mapbox=dict(
-                accesstoken=mapbox_access_token,
-                center=dict(
-                    lat=lat,
-                    lon=lon
-                ),
-                style='dark',
-                bearing=0,
-                zoom=zoom
-            )
-
-        )
-    }
-
-
-@app.callback(Output('example-graph1', 'figure'), [], [State('map-graph', 'relayoutData')],
-              [Event('map-graph', 'relayout')])
-def updateGraph1OnMapMove(relayoutData):
-    res = boundBox(relayoutData)
-    print(res)
-    return {
-        'data': [{
-            "values": [16, 15, 12, 6, 5, 4, 42],
-            "labels": [
-                "US",
-                "China",
-                "European Union",
-                "Russian Federation",
-                "Brazil",
-                "India",
-                "Rest of World"
-            ],
-            "domain": {'x': [.5, 1],
-                       'y': [.51, 1]},
-            "name": "GHG Emissions",
-            "hoverinfo": "label+percent+name",
-            "type": "pie"
-        }],
-        'layout': {
-            'title': 'Chart 1',
-            'margin': dict(
-                l=0,
-                r=0,
-                b=0,
-                t=30),
-            'height': 295
-        }
-    }
 
 @app.callback(Output('map-graph', 'figure'), [], [State('map-graph', 'relayoutData')],
               [Event('map-graph', 'relayout')])
