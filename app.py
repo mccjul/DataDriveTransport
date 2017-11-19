@@ -12,32 +12,31 @@ import dataparser
 
 app = dash.Dash()
 
+count = 5
+month = 5
 lat = 40.7272
 lon = -73.991251
 zoom = 12.0
 
-rangemap = {
-    'N': 40.758924,
-    'S': 40.679543,
-    'W':-74.047536,
-    'E': -73.888193
-}
-dataparser = dataparser.Dataparser(rangemap)
-dataparser.set_month(5)
+rangemap =  util.getCorners({'lat': lat, 'lng': lon}, zoom, 900, 500)
+print(rangemap)
+dp = dataparser.Dataparser(rangemap)
+dp.set_month(month)
+
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
 data = [
             Scattermapbox(
-                lat=dataparser.get_allBikePostsLatitudeList(),
-                lon=dataparser.get_allBikePostsLongitudeList(),
+                lat=dp.get_allBikePostsLatitudeList(),
+                lon=dp.get_allBikePostsLongitudeList(),
                 mode='markers',
                 marker=Marker(
                     size=8,
                     color='rgb(255, 0, 0)',
                     opacity=0.7
                 ),
-                text=dataparser.get_allBikePostsNameList(),
+                text=dp.get_allBikePostsNameList(),
             )
         ]
 
@@ -108,25 +107,25 @@ app.layout = html.Div(children=[
                     id='example-graph2',
                     figure={
                         'data': [
-                            {'x': dataparser.get_mostPopularCustomerPathList(5),
-                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+                            {'x': dp.get_mostPopularCustomerPathList(5),
+                             'y': dp.get_mostPopularCustomerPathCountList(5),
                              'type': 'bar',
                              'name': 'Customer'
                              },
-                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
-                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+                            {'x': dp.get_mostPopularSubscriberPathList(5),
+                             'y': dp.get_mostPopularSubscriberPathCountList(5),
                              'type': 'bar',
                              'name': 'Subscriber'
                              },
                         ],
                         'layout': {
-                            'title': 'Chart 2',
+                            'title': 'Total Trips over most Popular Stations by Usertype',
                             'margin': dict(
                                 l=0,
                                 r=0,
                                 b=0,
                                 t=40),
-                            'height': 295
+                            'height': 290
                         }
                     }
                 )
@@ -139,7 +138,7 @@ app.layout = html.Div(children=[
             min=0,
             max=9,
             marks={i: 'Label {}'.format(i) for i in range(10)},
-            value=5,
+            value=month,
         )
     ], style={'margin-left': 20, 'margin-right': 20, 'margin-top': 40})
 ])
@@ -179,44 +178,102 @@ def updateGraph1OnMapMove(relayoutData):
         }
     }
 
+@app.callback(Output('map-graph', 'figure'), [], [State('map-graph', 'relayoutData')],
+              [Event('map-graph', 'relayout')])
+def updateGraph2OnMapMove(relayoutData):
+    print(relayoutData)
+    res = boundBox(relayoutData)
+    d = get_dataparser(res)
 
+    data = [
+            Scattermapbox(
+                lat=d.get_allBikePostsLatitudeList(),
+                lon=d.get_allBikePostsLongitudeList(),
+                mode='markers',
+                marker=Marker(
+                    size=8,
+                    color='rgb(255, 0, 0)',
+                    opacity=0.7
+                ),
+                text=d.get_allBikePostsNameList(),
+            ),
+            Scattermapbox(
+                lat=d.get_allBikePostsLatitudeList(),
+                lon=d.get_allBikePostsLongitudeList(),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color='rgb(255, 0, 0)',
+                    opacity=0.7
+                ),
+                text=d.get_allBikePostsNameList(),
+        ),
+
+        ]
+
+
+    return {
+        'data': data,
+        'layout': go.Layout(
+                            autosize=True,
+                            height=600,
+                            width=900,
+                            margin=dict(l=0, r=0, b=0, t=0),
+                            showlegend=False,
+                            hovermode='closest',
+                            mapbox=dict(
+                                accesstoken=mapbox_access_token,
+                                center=dict(
+                                    lat = float(relayoutData['mapbox']['center']['lat']),
+                                    lon = float(relayoutData['mapbox']['center']['lon'])
+                                ),
+                                style='dark',
+                                bearing=0,
+                                zoom= float(relayoutData['mapbox']['zoom'])
+                            )
+
+                        )
+
+    }
 @app.callback(Output('example-graph2', 'figure'), [], [State('map-graph', 'relayoutData')],
               [Event('map-graph', 'relayout')])
 def updateGraph2OnMapMove(relayoutData):
     res = boundBox(relayoutData)
-    dataparser.set_dfRangeBikepost(res)
-    print(res)
+    d = get_dataparser(res)
+
 
     return {
         'data': [
-                            {'x': dataparser.get_mostPopularCustomerPathList(5),
-                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+                            {'x': d.get_mostPopularCustomerPathList(5),
+                             'y': d.get_mostPopularCustomerPathCountList(5),
                              'type': 'bar',
                              'name': 'Customer'
                              },
-                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
-                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+                            {'x': d.get_mostPopularSubscriberPathList(5),
+                             'y': d.get_mostPopularSubscriberPathCountList(5),
                              'type': 'bar',
                              'name': 'Subscriber'
                              },
                         ],
         'layout': {
-            'title': 'Chart 2',
-            'height': '300',
-            'margin': dict(l=0, r=0, b=0, t=100)
+            'title': 'Total Trips over most Popular Stations by Usertype',
+            'margin': dict(
+                                l=0,
+                                r=0,
+                                b=0,
+                                t=40),
+            'height': 290
         }
     }
 
+def get_dataparser(res):
+    return dataparser.Dataparser(res)
 
 def boundBox(relayout):
-    print(relayout)
     # Updating globals at the same time so we can hack the event portion of callbacks
     lon = float(relayout['mapbox']['center']['lon'])
     lat = float(relayout['mapbox']['center']['lat'])
     zoom = float(relayout['mapbox']['zoom'])
-    print("lon: "+str(lon))
-    print("lat: " +str(lat))
-    print("zoon: "+ str(zoom))
     return util.getCorners({'lat': lat, 'lng': lon}, zoom, 900, 500)
 
 

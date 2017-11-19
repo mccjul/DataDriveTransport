@@ -4,10 +4,10 @@ import pandas as pd
 import numpy as np
 
 class Dataparser():
-    def __init__(self, data):
+    def __init__(self, rangemap):
         self.dfStations = pd.read_csv('data/Stations.csv')
         self.dfRangeBikepost = self.dfStations.copy()
-        self.set_dfRangeBikepost(data)
+        self.set_dfRangeBikepost(rangemap)
 
         self.dfTrips = pd.read_csv('data/2014_04_Trips.csv')
         self.dfMostPopularCustomerPaths = self.dfTrips.copy()
@@ -32,10 +32,10 @@ class Dataparser():
         return self.dfRangeBikepost['Longitude'].values.tolist()
 
     def get_allBikePostsNameList(self):
-        return self.dfRangeBikepost['Station Name'].values.tolist()
+        return self.dfRangeBikepost['StationName'].values.tolist()
 
     def set_mostPopularPaths(self):
-        bikepostRangeList = self.dfRangeBikepost['Station ID'].values.tolist()
+        bikepostRangeList = self.dfRangeBikepost['StationID'].values.tolist()
 
         self.dfMostPopularCustomerPaths = self.dfMostPopularCustomerPaths\
             .query('usertype == "Customer" and startstationid in @bikepostRangeList and endstationid in @bikepostRangeList')\
@@ -49,9 +49,12 @@ class Dataparser():
 
     def get_mostPopularCustomerPathList(self, count):
         mostPopularCustomerPathList = []
+        mostPopularCustomerPathNameList = []
         for p in range(count):
             mostPopularCustomerPathList.append(self.dfMostPopularCustomerPaths['startstationid'].values.tolist()[p])
-        return mostPopularCustomerPathList
+            mostPopularCustomerPathNameList = \
+            self.dfRangeBikepost.query('StationID in @mostPopularCustomerPathList')['StationName'].values.tolist()
+        return mostPopularCustomerPathNameList
 
     def get_mostPopularCustomerPathCountList(self, count):
         mostPopularCustomerPathCountList = []
@@ -61,9 +64,11 @@ class Dataparser():
 
     def get_mostPopularSubscriberPathList(self, count):
         mostPopularSubscriberPathList = []
+        mostPopularSubscriberPathNameList = []
         for p in range(count):
             mostPopularSubscriberPathList.append(self.dfMostPopularSubscriberPaths['startstationid'].values.tolist()[p])
-        return mostPopularSubscriberPathList
+            mostPopularSubscriberPathNameList = self.dfRangeBikepost.query('StationID in @mostPopularSubscriberPathList')['StationName'].values.tolist()
+        return mostPopularSubscriberPathNameList
 
     def get_mostPopularSubscriberPathCountList(self, count):
         mostPopularSubscriberPathCountList = []
@@ -71,19 +76,18 @@ class Dataparser():
             mostPopularSubscriberPathCountList.append(self.dfMostPopularSubscriberPaths['count'].values.tolist()[p])
         return mostPopularSubscriberPathCountList
 
+    def get_mostPopularSubscriberPathLatitudeList(self, count):
+        mostPopularSubscriberPathList = []
+        mostPopularSubscriberPathLatitudeList = []
+        for p in range(count):
+            mostPopularSubscriberPathList.append(self.dfMostPopularSubscriberPaths['startstationid'].values.tolist()[p])
+            mostPopularSubscriberPathLatitudeList = \
+            self.dfRangeBikepost.query('StationID in @mostPopularSubscriberPathList')['Latitude'].values.tolist()
+        return mostPopularSubscriberPathLatitudeList
 
 
-#
-# data = {
-#     'N':40.7,
-#     'S':40,
-#     'W':-74,
-#     'E':-73
-# }
-#
-# dataparser = Dataparser(data)
-# print(dataparser.get_mostPopularSubscriberPathList(5))
-# print(dataparser.get_mostPopularSubscriberPathCountList(5))
+
+
 
 
 

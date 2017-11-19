@@ -37,12 +37,11 @@ class MercatorProjection :
 
     def __init__(self) :
       self.pixelOrigin_ =  G_Point( MERCATOR_RANGE / 2, MERCATOR_RANGE / 2)
-      self.pixelsPerLonDegree_ = MERCATOR_RANGE / 360
+      self.pixelsPerLonDegree_ = float(MERCATOR_RANGE) / float(360)
       self.pixelsPerLonRadian_ = MERCATOR_RANGE / (2 * math.pi)
 
 
     def fromLatLngToPoint(self, latLng, opt_point=None) :
-      print(latLng)
       point = opt_point if opt_point is not None else G_Point(0,0)
       origin = self.pixelOrigin_
       point.x = origin.x + latLng['lng'] * self.pixelsPerLonDegree_
@@ -54,11 +53,11 @@ class MercatorProjection :
 
 
     def fromPointToLatLng(self,point) :
-          origin = self.pixelOrigin_
-          lng = (point.x - origin.x) / self.pixelsPerLonDegree_
-          latRadians = (point.y - origin.y) / -self.pixelsPerLonRadian_
-          lat = radiansToDegrees(2 * math.atan(math.exp(latRadians)) - math.pi / 2)
-          return G_LatLng(lat, lng)
+        origin = self.pixelOrigin_
+        lng = float(point.x - origin.x) / float(self.pixelsPerLonDegree_)
+        latRadians = (point.y - origin.y) / -self.pixelsPerLonRadian_
+        lat = radiansToDegrees(2 * math.atan(math.exp(latRadians)) - math.pi / 2)
+        return G_LatLng(lat, lng)
 
 #pixelCoordinate = worldCoordinate * pow(2,zoomLevel)
 
