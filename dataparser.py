@@ -12,22 +12,12 @@ bikepostList = [None]*3005
 for index, row in df.iterrows():
     bikepostList[row['Station ID']] = bikepost.BikePost(row['Station Name'], row['Latitude'], row['Longitude'])
 
-# Test
-print(len(bikepostList))
-print(bikepostList[3002])
-
-# Parse trips
-
-#Initialize Variables
-totalNumberTrips = 0
-totalDuration = 0
-
-# Create trip object
-totalNumberTrips += 1
-totalDuration += 0 # Certain data
 
 df = pd.read_csv('data/2014_04_Trips.csv')
 
+class Dataparser():
+    def __init__(self):
+        self.f
 
 
 
