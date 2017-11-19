@@ -37,7 +37,9 @@ app.layout = html.Div(children=[
                     lon=dataAnalyzer.get_allBikePostsLongitude(),
                     mode='markers',
                     marker=Marker(
-                        size=14
+                        size=12,
+                        color='rgb(255, 0, 0)',
+                        opacity=0.7
                     ),
                     text=dataAnalyzer.get_allBikePostsName(),
                 )
