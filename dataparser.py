@@ -9,14 +9,13 @@ class Dataparser():
         self.dfRangeBikepost = self.dfStations.copy()
         self.set_dfRangeBikepost(data)
 
-        self.dfTrips04 = pd.read_csv('data/2014_04_Trips.csv')
-        self.dfMostPopularCustomerPaths = self.dfTrips04.copy()
-        self.dfMostPopularSubscriberPaths = self.dfTrips04.copy()
+        self.dfTrips = pd.read_csv('data/2014_04_Trips.csv')
+        self.dfMostPopularCustomerPaths = self.dfTrips.copy()
+        self.dfMostPopularSubscriberPaths = self.dfTrips.copy()
         self.set_mostPopularPaths()
 
-        self.matrixCustomerTrips04 = self.convertTo_matrixTrips(pd.read_csv('data/itmatrixCustomer.csv'))
-        self.matrixSubscriberTrips04 = self.convertTo_matrixTrips(pd.read_csv('data/itmatrixSubscriber.csv'))
-
+    def set_month(self, month):
+        self.dfTrips = pd.read_csv('data/2014_0'+str(month)+'_Trips.csv')
 
     def set_dfRangeBikepost(self, rangemap):
         lat1 = rangemap['S']
@@ -25,9 +24,6 @@ class Dataparser():
         lon2 = rangemap['E']
 
         self.dfRangeBikepost = self.dfRangeBikepost.query('Latitude > @lat1 and Latitude < @lat2 and Longitude > @lon1 and Longitude < @lon2')
-
-    def convertTo_matrixTrips(self, df):
-        return df.as_matrix()
 
     def get_allBikePostsLatitudeList(self):
         return self.dfRangeBikepost['Latitude'].values.tolist()
@@ -77,17 +73,17 @@ class Dataparser():
 
 
 
-
-data = {
-    'N':40.7,
-    'S':40,
-    'W':-74,
-    'E':-73
-}
-
-dataparser = Dataparser(data)
-print(dataparser.get_mostPopularSubscriberPathList(5))
-print(dataparser.get_mostPopularSubscriberPathCountList(5))
+#
+# data = {
+#     'N':40.7,
+#     'S':40,
+#     'W':-74,
+#     'E':-73
+# }
+#
+# dataparser = Dataparser(data)
+# print(dataparser.get_mostPopularSubscriberPathList(5))
+# print(dataparser.get_mostPopularSubscriberPathCountList(5))
 
 
 

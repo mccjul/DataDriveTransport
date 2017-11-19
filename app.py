@@ -23,6 +23,7 @@ rangemap = {
     'E': -73.888193
 }
 dataparser = dataparser.Dataparser(rangemap)
+dataparser.set_month(5)
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
@@ -208,10 +209,14 @@ def updateGraph2OnMapMove(relayoutData):
 
 
 def boundBox(relayout):
+    print(relayout)
     # Updating globals at the same time so we can hack the event portion of callbacks
     lon = float(relayout['mapbox']['center']['lon'])
     lat = float(relayout['mapbox']['center']['lat'])
     zoom = float(relayout['mapbox']['zoom'])
+    print("lon: "+str(lon))
+    print("lat: " +str(lat))
+    print("zoon: "+ str(zoom))
     return util.getCorners({'lat': lat, 'lng': lon}, zoom, 900, 500)
 
 
