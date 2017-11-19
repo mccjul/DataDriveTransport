@@ -16,7 +16,13 @@ lat=40.7272
 lon=-73.991251
 zoom = 12.0
 
-dataparser = dataparser.Dataparser()
+rangemap = {
+    'N': 40.758924,
+    'S': 40.679543,
+    'W':-74.047536,
+    'E': -73.888193
+}
+dataparser = dataparser.Dataparser(rangemap)
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
@@ -88,8 +94,16 @@ app.layout = html.Div(children=[
                     id='example-graph2',
                     figure={
                         'data': [
-                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+                            {'x': dataparser.get_mostPopularCustomerPathList(5),
+                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Customer'
+                             },
+                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
+                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Subscriber'
+                             },
                         ],
                         'layout': {
                             'title': 'Chart 2',
@@ -146,11 +160,22 @@ def updateGraph1OnMapMove(relayoutData):
 @app.callback(Output('example-graph2', 'figure'), [], [State('map-graph', 'relayoutData')],
               [Event('map-graph', 'relayout')])
 def updateGraph2OnMapMove(relayoutData):
-    res=boundBox(relayoutData)
+    res = boundBox(relayoutData)
+    dataparser.set_dfRangeBikepost(res)
+    print(res)
     return {
         'data': [
-            {'x': [1, 2, 3], 'y': [2, 1, 2], 'type': 'bar', 'name': 'SF'},
-        ],
+                            {'x': dataparser.get_mostPopularCustomerPathList(5),
+                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Customer'
+                             },
+                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
+                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Subscriber'
+                             },
+                        ],
         'layout': {
             'title': 'Chart 2',
             'height': '300',
