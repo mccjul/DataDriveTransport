@@ -9,7 +9,6 @@ from plotly.graph_objs import *
 import util
 import dataparser
 
-
 app = dash.Dash()
 
 lat = 40.7272
@@ -19,7 +18,7 @@ zoom = 12.0
 rangemap = {
     'N': 40.758924,
     'S': 40.679543,
-    'W':-74.047536,
+    'W': -74.047536,
     'E': -73.888193
 }
 dataparser = dataparser.Dataparser(rangemap)
@@ -27,19 +26,18 @@ dataparser = dataparser.Dataparser(rangemap)
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
 data = [
-            Scattermapbox(
-                lat=dataparser.get_allBikePostsLatitudeList(),
-                lon=dataparser.get_allBikePostsLongitudeList(),
-                mode='markers',
-                marker=Marker(
-                    size=8,
-                    color='rgb(255, 0, 0)',
-                    opacity=0.7
-                ),
-                text=dataparser.get_allBikePostsNameList(),
-            )
-        ]
-
+    Scattermapbox(
+        lat=dataparser.get_allBikePostsLatitudeList(),
+        lon=dataparser.get_allBikePostsLongitudeList(),
+        mode='markers',
+        marker=Marker(
+            size=8,
+            color='rgb(255, 0, 0)',
+            opacity=0.7
+        ),
+        text=dataparser.get_allBikePostsNameList(),
+    )
+]
 
 app.layout = html.Div(children=[
     html.Div([
@@ -135,13 +133,41 @@ app.layout = html.Div(children=[
     ], className='row'),
     html.Div([
         dcc.Slider(
+            id="month-slider",
             min=0,
             max=9,
             marks={i: 'Label {}'.format(i) for i in range(10)},
-            value=5,
+            value=0,
         )
     ], style={'margin-left': 20, 'margin-right': 20, 'margin-top': 40})
 ])
+
+
+@app.callback(Output('map-graph', 'figure'), [Input('month-slider', 'value')], [State('month-slider', 'value')])
+def updateMapPerMonth(trigger, value):
+    print(value)
+    return {
+        'data': data,
+        'layout': go.Layout(
+            autosize=True,
+            height=600,
+            width=900,
+            margin=dict(l=0, r=0, b=0, t=0),
+            showlegend=False,
+            hovermode='closest',
+            mapbox=dict(
+                accesstoken=mapbox_access_token,
+                center=dict(
+                    lat=lat,
+                    lon=lon
+                ),
+                style='dark',
+                bearing=0,
+                zoom=zoom
+            )
+
+        )
+    }
 
 
 @app.callback(Output('example-graph1', 'figure'), [], [State('map-graph', 'relayoutData')],
@@ -188,17 +214,17 @@ def updateGraph2OnMapMove(relayoutData):
 
     return {
         'data': [
-                            {'x': dataparser.get_mostPopularCustomerPathList(5),
-                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
-                             'type': 'bar',
-                             'name': 'Customer'
-                             },
-                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
-                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
-                             'type': 'bar',
-                             'name': 'Subscriber'
-                             },
-                        ],
+            {'x': dataparser.get_mostPopularCustomerPathList(5),
+             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+             'type': 'bar',
+             'name': 'Customer'
+             },
+            {'x': dataparser.get_mostPopularSubscriberPathList(5),
+             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+             'type': 'bar',
+             'name': 'Subscriber'
+             },
+        ],
         'layout': {
             'title': 'Chart 2',
             'height': '300',
