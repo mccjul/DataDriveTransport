@@ -7,6 +7,8 @@ import plotly.plotly as py
 from plotly import graph_objs as go
 from plotly.graph_objs import *
 import util
+import dataparser
+
 
 app = dash.Dash()
 
@@ -14,21 +16,21 @@ lat=40.7272
 lon=-73.991251
 zoom = 12.0
 
-mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
+dataparser = dataparser.Dataparser()
 
-loopPathList = []
+mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
 data = [
             Scattermapbox(
-                lat=dataAnalyzer.get_allBikePostsLatitude(),
-                lon=dataAnalyzer.get_allBikePostsLongitude(),
+                lat=dataparser.get_allBikePostsLatitudeList(),
+                lon=dataparser.get_allBikePostsLongitudeList(),
                 mode='markers',
                 marker=Marker(
                     size=8,
                     color='rgb(255, 0, 0)',
                     opacity=0.7
                 ),
-                text=dataAnalyzer.get_allBikePostsName(),
+                text=dataparser.get_allBikePostsNameList(),
             )
         ]
 
