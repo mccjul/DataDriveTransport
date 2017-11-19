@@ -198,15 +198,15 @@ def updateGraph2OnMapMove(relayoutData):
                 text=d.get_allBikePostsNameList(),
             ),
             Scattermapbox(
-                lat=d.get_allBikePostsLatitudeList(),
-                lon=d.get_allBikePostsLongitudeList(),
+                lat=d.get_mostPopularSubscriberPathLatitudeList(),
+                lon=d.get_mostPopularSubscriberPathLongitudeList(),
                 mode='markers',
                 marker=Marker(
                     size=12,
                     color='rgb(255, 0, 0)',
                     opacity=0.7
                 ),
-                text=d.get_allBikePostsNameList(),
+                text=d.get_mostPopularSubscriberPathList(),
         ),
 
         ]

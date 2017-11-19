@@ -85,6 +85,15 @@ class Dataparser():
             self.dfRangeBikepost.query('StationID in @mostPopularSubscriberPathList')['Latitude'].values.tolist()
         return mostPopularSubscriberPathLatitudeList
 
+    def get_mostPopularSubscriberPathLongitudeList(self, count):
+        mostPopularSubscriberPathList = []
+        mostPopularSubscriberPathLongitudeList = []
+        for p in range(count):
+            mostPopularSubscriberPathList.append(self.dfMostPopularSubscriberPaths['startstationid'].values.tolist()[p])
+            mostPopularSubscriberPathLongitudeList = \
+            self.dfRangeBikepost.query('StationID in @mostPopularSubscriberPathList')['Longitude'].values.tolist()
+        return mostPopularSubscriberPathLongitudeList
+
 
 
 
