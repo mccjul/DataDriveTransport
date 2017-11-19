@@ -15,6 +15,7 @@ app = dash.Dash()
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
+loopPathList = []
 
 data = [
             Scattermapbox(
@@ -23,7 +24,7 @@ data = [
                 mode='markers',
                 marker=Marker(
                     size=8,
-                    color='rgb(242, 177, 172)',
+                    color='rgb(255, 0, 0)',
                     opacity=0.7
                 ),
                 text=dataAnalyzer.get_allBikePostsName(),
@@ -36,23 +37,33 @@ for p in dataAnalyzer.get_allPaths():
                 lon=(p.startBikepost.location[1], p.endBikepost.location[1]),
                 mode='lines',
                 line=Line(
-                    width=3
+                    width=2
                 ),
                 opacity=0.7,
             )
-    else:
-        result = Scattermapbox(
-            lat=p.startBikepost.location[0],
-            lon=p.startBikepost.location[1],
+        data.append(result)
+    if p.startBikepost == p.endBikepost:
+        loopPathList.append(p)
+
+
+pathLatList = []
+pathLonList = []
+
+for path in loopPathList:
+    pathLatList.append(path.startBikepost.location[0])
+    pathLonList.append(path.startBikepost.location[1])
+
+data.append(
+    Scattermapbox(
+            lat=pathLatList,
+            lon=pathLonList,
             mode='markers',
             marker=Marker(
-                size=17,
-                color='rgb(255, 0, 0)',
-                opacity=0.7
+                size=12,
+                color='rgb(242, 177, 172)',
+                opacity=0.5
             )
-        )
-    data.append(result)
-
+        ))
 
 app.layout = html.Div(children=[
     html.Div([
