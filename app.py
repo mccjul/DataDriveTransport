@@ -7,6 +7,9 @@ import plotly.plotly as py
 from plotly import graph_objs as go
 from plotly.graph_objs import *
 import util
+import dataAnalyzer
+
+dataAnalyzer = dataAnalyzer.DataAnalyzer()
 
 app = dash.Dash()
 

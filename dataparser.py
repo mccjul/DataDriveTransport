@@ -1,12 +1,20 @@
-__author__ = Kevin
-
 import bikepost
 import trip
-import overtimetrip
+import pandas as pd
+import numpy as np
 
 # Parse memberships
 
 # Parse bikeposts
+df = pd.read_csv('data/Stations.csv')
+bikepostList = [None]*3005
+
+for index, row in df.iterrows():
+    bikepostList[row['Station ID']] = bikepost.BikePost(row['Station Name'], row['Latitude'], row['Longitude'])
+
+# Test
+print(len(bikepostList))
+print(bikepostList[3002])
 
 # Parse trips
 
@@ -14,8 +22,11 @@ import overtimetrip
 totalNumberTrips = 0
 totalDuration = 0
 
-# Read csv.
-
 # Create trip object
 totalNumberTrips += 1
 totalDuration += 0 # Certain data
+
+
+
+
+
