@@ -9,7 +9,7 @@ import numpy as np
 df = pd.read_csv('data/Stations.csv')
 bikepostList = [None]*3005
 
-for index, row in bf.iterrows():
+for index, row in df.iterrows():
     bikepostList[row['Station ID']] = bikepost.BikePost(row['Station Name'], row['Latitude'], row['Longitude'])
 
 # Test

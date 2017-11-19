@@ -6,6 +6,9 @@ import dash_html_components as html
 import plotly.plotly as py
 from plotly import graph_objs as go
 from plotly.graph_objs import *
+import dataAnalyzer
+
+dataAnalyzer = dataAnalyzer.DataAnalyzer()
 
 app = dash.Dash()
 
@@ -30,13 +33,13 @@ app.layout = html.Div(children=[
         figure={
             'data': [
                 Scattermapbox(
-                    lat=['45.5017'],
-                    lon=['-73.5673'],
+                    lat=dataAnalyzer.get_allBikePostsLatitude(),
+                    lon=dataAnalyzer.get_allBikePostsLongitude(),
                     mode='markers',
                     marker=Marker(
                         size=14
                     ),
-                    text=['Montreal'],
+                    text=dataAnalyzer.get_allBikePostsName(),
                 )
             ],
             'layout': go.Layout(autosize=True,
