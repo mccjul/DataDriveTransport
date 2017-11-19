@@ -6,13 +6,10 @@ import dash_html_components as html
 import plotly.plotly as py
 from plotly import graph_objs as go
 from plotly.graph_objs import *
-<<<<<<< HEAD
 import util
-=======
 import dataAnalyzer
 
 dataAnalyzer = dataAnalyzer.DataAnalyzer()
->>>>>>> pandaTest
 
 app = dash.Dash()
 
@@ -132,7 +129,6 @@ def updateGraph1(relayoutData):
             'height': '300',
             'margin': dict(l=0, r=0, b=0, t=100)
         }
-<<<<<<< HEAD
     }
 
 @app.callback(Output('example-graph2', 'figure'), [], [State('map-graph', 'relayoutData')],
@@ -148,39 +144,6 @@ def updateGraph2(relayoutData):
             'title': 'Chart 2',
             'height': '300',
             'margin': dict(l=0, r=0, b=0, t=100)
-=======
-    ),
-    dcc.Graph(
-        id='map-graph',
-        figure={
-            'data': [
-                Scattermapbox(
-                    lat=dataAnalyzer.get_allBikePostsLatitude(),
-                    lon=dataAnalyzer.get_allBikePostsLongitude(),
-                    mode='markers',
-                    marker=Marker(
-                        size=12,
-                        color='rgb(255, 0, 0)',
-                        opacity=0.7
-                    ),
-                    text=dataAnalyzer.get_allBikePostsName(),
-                )
-            ],
-            'layout': go.Layout(autosize=True,
-                                height=750,
-                                margin=Margin(l=0, r=0, t=0, b=0),
-                                showlegend=False,
-                                mapbox=dict(
-                                    accesstoken=mapbox_access_token,
-                                    center=dict(
-                                        lat=40.7272,
-                                        lon=-73.991251
-                                    ),
-                                    style='dark',
-                                    bearing=0,
-                                    zoom=12.0
-                                ))
->>>>>>> pandaTest
         }
     }
 
