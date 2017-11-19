@@ -22,22 +22,37 @@ data = [
                 lon=dataAnalyzer.get_allBikePostsLongitude(),
                 mode='markers',
                 marker=Marker(
-                    size=8
+                    size=8,
+                    color='rgb(242, 177, 172)',
+                    opacity=0.7
                 ),
                 text=dataAnalyzer.get_allBikePostsName(),
             )
         ]
 for p in dataAnalyzer.get_allPaths():
-    result = Scattermapbox(
-                lat=(p[0].location[0], p[1].location[0]),
-                lon=(p[0].location[1], p[1].location[1]),
+    if p.startBikepost is not p.endBikepost:
+        result = Scattermapbox(
+                lat=(p.startBikepost.location[0], p.endBikepost.location[0]),
+                lon=(p.startBikepost.location[1], p.endBikepost.location[1]),
                 mode='lines',
                 line=Line(
-                    width=1
+                    width=3
                 ),
                 opacity=0.7,
             )
+    else:
+        result = Scattermapbox(
+            lat=p.startBikepost.location[0],
+            lon=p.startBikepost.location[1],
+            mode='markers',
+            marker=Marker(
+                size=17,
+                color='rgb(255, 0, 0)',
+                opacity=0.7
+            )
+        )
     data.append(result)
+
 
 app.layout = html.Div(children=[
     html.Div([
