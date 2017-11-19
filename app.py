@@ -15,6 +15,30 @@ app = dash.Dash()
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
+
+data = [
+            Scattermapbox(
+                lat=dataAnalyzer.get_allBikePostsLatitude(),
+                lon=dataAnalyzer.get_allBikePostsLongitude(),
+                mode='markers',
+                marker=Marker(
+                    size=8
+                ),
+                text=dataAnalyzer.get_allBikePostsName(),
+            )
+        ]
+for p in dataAnalyzer.get_allPaths():
+    result = Scattermapbox(
+                lat=(p[0].location[0], p[1].location[0]),
+                lon=(p[0].location[1], p[1].location[1]),
+                mode='lines',
+                line=Line(
+                    width=1
+                ),
+                opacity=0.7,
+            )
+    data.append(result)
+
 app.layout = html.Div(children=[
     html.Div([
         html.Div(
@@ -22,17 +46,7 @@ app.layout = html.Div(children=[
                 dcc.Graph(
                     id='map-graph',
                     figure={
-                        'data': [
-                            Scattermapbox(
-                                lat=['40.7272', '40.6945', '40.7272'],
-                                lon=['-73.991251', '-73.991251', '-73.911200'],
-                                mode='markers',
-                                marker=Marker(
-                                    size=14
-                                ),
-                                text=['Montreal', 'Bob town', 'Mary town'],
-                            )
-                        ],
+                        'data': data,
                         'layout': go.Layout(
                             autosize=True,
                             height=500,
@@ -57,8 +71,16 @@ app.layout = html.Div(children=[
                     id='example-graph1',
                     figure={
                         'data': [
-                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+                            {'x': [1, 2, 3],
+                             'y': [4, 1, 2],
+                             'type': 'bar',
+                             'name': 'SF'
+                             },
+                            {'x': [1, 2, 3],
+                             'y': [2, 4, 5],
+                             'type': 'bar',
+                             'name': u'Montréal'
+                             },
                         ],
                         'layout': {
                             'title': 'Chart 1',

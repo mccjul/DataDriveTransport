@@ -1,7 +1,7 @@
 import math
 
 class Trip():
-    def __init__(self, duration, startTime, endTime, startBikepost, endBikepost, userType, birthyear, gender):
+    def __init__(self, duration, startTime, endTime, startBikepost, endBikepost, userType):
 
         # Initiate Attributes
         self.duration = duration
@@ -10,9 +10,6 @@ class Trip():
         self.startBikepost = startBikepost
         self.endBikepost = endBikepost
         self.userType = userType
-        self.birthyear = birthyear
-        # Gender = 0 is unknown; 1 is male; 2 is female;
-        self.gender = gender
         self.isOvertimed = False
 
         # Overtime variable
