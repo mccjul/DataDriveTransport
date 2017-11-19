@@ -5,6 +5,12 @@ util.pyc
 =======
 .idea/workspace.xml
 >>>>>>> pandaTest
+<<<<<<< HEAD
 trip.pyc
 dataAnalyzer.pyc
 dataparser.pyc
+=======
+dataAnalyzer.py
+dataparser.pyc
+trip.pyc
+>>>>>>> lineTest

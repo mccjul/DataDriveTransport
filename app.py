@@ -7,9 +7,6 @@ import plotly.plotly as py
 from plotly import graph_objs as go
 from plotly.graph_objs import *
 import util
-import dataAnalyzer
-
-dataAnalyzer = dataAnalyzer.DataAnalyzer()
 
 app = dash.Dash()
 
@@ -19,6 +16,23 @@ zoom = 12.0
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
+loopPathList = []
+
+data = [
+            Scattermapbox(
+                lat=dataAnalyzer.get_allBikePostsLatitude(),
+                lon=dataAnalyzer.get_allBikePostsLongitude(),
+                mode='markers',
+                marker=Marker(
+                    size=8,
+                    color='rgb(255, 0, 0)',
+                    opacity=0.7
+                ),
+                text=dataAnalyzer.get_allBikePostsName(),
+            )
+        ]
+
+
 app.layout = html.Div(children=[
     html.Div([
         html.Div(
@@ -26,18 +40,7 @@ app.layout = html.Div(children=[
                 dcc.Graph(
                     id='map-graph',
                     figure={
-                        'data': [
-                            Scattermapbox(
-                                lat=['40.7272', '40.6945', '40.7272'],
-                                lon=['-73.991251', '-73.991251', '-73.911200'],
-
-                                marker=Marker(
-                                    size=14
-                                ),
-                                text=['Montreal', 'Bob town', 'Mary town'],
-                                customdata=['thing1', 'thing2', 'thing3']
-                            )
-                        ],
+                        'data': data,
                         'layout': go.Layout(
                             autosize=True,
                             height=600,
