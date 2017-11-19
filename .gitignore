@@ -6,3 +6,5 @@ util.pyc
 .idea/workspace.xml
 >>>>>>> pandaTest
 dataAnalyzer.py
+dataparser.pyc
+trip.pyc
