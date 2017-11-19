@@ -27,15 +27,7 @@ totalNumberTrips += 1
 totalDuration += 0 # Certain data
 
 df = pd.read_csv('data/2014_04_Trips.csv')
-tripList = []
-# duration, startTime, endTime, startBikepost, endBikepost, userType
-count = 0
-for index, row in df.iterrows():
-    tripList.append(trip.Trip(row['tripduration'], row['starttime'], row['stoptime'], bikepostList[int(row['start station id'])],
-                              bikepostList[int(row['end station id'])], row['usertype']))
-    count += 1
-    if count > 100:
-        break
+
 
 
 
