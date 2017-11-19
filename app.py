@@ -9,7 +9,6 @@ from plotly.graph_objs import *
 import util
 import dataparser
 
-
 app = dash.Dash()
 
 count = 5
@@ -22,7 +21,6 @@ rangemap =  util.getCorners({'lat': lat, 'lng': lon}, zoom, 900, 500)
 print(rangemap)
 dp = dataparser.Dataparser(rangemap)
 dp.set_month(month)
-
 
 mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
@@ -99,7 +97,6 @@ data = [
                 text=dp.get_mostPopularCustomerEndPathList(5),
             ),
         ]
-
 
 
 
@@ -211,6 +208,7 @@ app.layout = html.Div(children=[
     ], className='row'),
     html.Div([
         dcc.Slider(
+            id="month-slider",
             min=0,
             max=9,
             marks={i: 'Label {}'.format(i) for i in range(10)},
@@ -218,6 +216,33 @@ app.layout = html.Div(children=[
         )
     ], style={'margin-left': 20, 'margin-right': 20, 'margin-top': 40})
 ])
+
+
+@app.callback(Output('map-graph', 'figure'), [Input('month-slider', 'value')], [State('month-slider', 'value')])
+def updateMapPerMonth(trigger, value):
+    print(value)
+    return {
+        'data': data,
+        'layout': go.Layout(
+            autosize=True,
+            height=600,
+            width=900,
+            margin=dict(l=0, r=0, b=0, t=0),
+            showlegend=False,
+            hovermode='closest',
+            mapbox=dict(
+                accesstoken=mapbox_access_token,
+                center=dict(
+                    lat=lat,
+                    lon=lon
+                ),
+                style='dark',
+                bearing=0,
+                zoom=zoom
+            )
+
+        )
+    }
 
 
 @app.callback(Output('example-graph1', 'figure'), [], [State('map-graph', 'relayoutData')],
@@ -396,6 +421,7 @@ def updateGraph2OnMapMove(relayoutData):
 
                              },
                         ],
+
         'layout': {
             'title': 'Total Trips over most Popular Stations by Usertype',
             'margin': dict(
