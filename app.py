@@ -37,8 +37,70 @@ data = [
                     opacity=0.7
                 ),
                 text=dp.get_allBikePostsNameList(),
-            )
+            ),
+            Scattermapbox(
+                lat=dp.get_mostPopularSubscriberPathLatitudeList(5),
+                lon=dp.get_mostPopularSubscriberPathLongitudeList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#44AF69',
+                           '#F8333C',
+                           '#FCAB10',
+                           '#2B9EB3',
+                           '#DBD5B5'],
+                    opacity=0.8
+                ),
+                text=dp.get_mostPopularSubscriberPathList(5),
+            ),
+            Scattermapbox(
+                lat=dp.get_mostPopularCustomerPathLatitudeList(5),
+                lon=dp.get_mostPopularCustomerPathLongitudeList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#FF8360',
+                           '#E8E288',
+                           '#7DCE82',
+                           '#3CDBD3',
+                           '#00FFF5'],
+                    opacity=0.8
+                ),
+                text=dp.get_mostPopularCustomerPathList(5),
+            ),
+            Scattermapbox(
+                lat=dp.get_mostPopularSubscriberEndPathLatList(5),
+                lon=dp.get_mostPopularSubscriberEndPathLonList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#44AF69',
+                           '#F8333C',
+                           '#FCAB10',
+                           '#2B9EB3',
+                           '#DBD5B5'],
+                    opacity=0.8
+                ),
+                text=dp.get_mostPopularSubscriberEndPathList(5),
+            ),
+            Scattermapbox(
+                lat=dp.get_mostPopularCustomerEndPathLatList(5),
+                lon=dp.get_mostPopularCustomerEndPathLonList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#FF8360',
+                               '#E8E288',
+                               '#7DCE82',
+                               '#3CDBD3',
+                               '#00FFF5'],
+                    opacity=0.8
+                ),
+                text=dp.get_mostPopularCustomerEndPathList(5),
+            ),
         ]
+
+
 
 
 app.layout = html.Div(children=[
@@ -110,12 +172,26 @@ app.layout = html.Div(children=[
                             {'x': dp.get_mostPopularCustomerPathList(5),
                              'y': dp.get_mostPopularCustomerPathCountList(5),
                              'type': 'bar',
-                             'name': 'Customer'
+                             'name': 'Customer',
+                             'marker': dict(
+                                 color=['#FF8360',
+                                        '#E8E288',
+                                        '#7DCE82',
+                                        '#3CDBD3',
+                                        '#00FFF5']
+                             )
                              },
                             {'x': dp.get_mostPopularSubscriberPathList(5),
                              'y': dp.get_mostPopularSubscriberPathCountList(5),
                              'type': 'bar',
-                             'name': 'Subscriber'
+                             'name': 'Subscriber',
+                             'marker': dict(
+                                 color=['#44AF69',
+                                        '#F8333C',
+                                        '#FCAB10',
+                                        '#2B9EB3',
+                                        '#DBD5B5']
+                             )
                              },
                         ],
                         'layout': {
@@ -198,16 +274,65 @@ def updateGraph2OnMapMove(relayoutData):
                 text=d.get_allBikePostsNameList(),
             ),
             Scattermapbox(
-                lat=d.get_mostPopularSubscriberPathLatitudeList(),
-                lon=d.get_mostPopularSubscriberPathLongitudeList(),
+                lat=d.get_mostPopularSubscriberPathLatitudeList(5),
+                lon=d.get_mostPopularSubscriberPathLongitudeList(5),
                 mode='markers',
                 marker=Marker(
                     size=12,
-                    color='rgb(255, 0, 0)',
+                    color=['#44AF69',
+                                        '#F8333C',
+                                        '#FCAB10',
+                                        '#2B9EB3',
+                                        '#DBD5B5'],
                     opacity=0.7
                 ),
-                text=d.get_mostPopularSubscriberPathList(),
-        ),
+                text=d.get_mostPopularSubscriberPathList(5),
+            ),
+            Scattermapbox(
+                lat=d.get_mostPopularCustomerPathLatitudeList(5),
+                lon=d.get_mostPopularCustomerPathLongitudeList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#FF8360',
+                           '#E8E288',
+                           '#7DCE82',
+                           '#3CDBD3',
+                           '#00FFF5'],
+                    opacity=0.7
+                ),
+                text=d.get_mostPopularCustomerPathList(5),
+            ),
+            Scattermapbox(
+                lat=dp.get_mostPopularSubscriberEndPathLatList(5),
+                lon=dp.get_mostPopularSubscriberEndPathLonList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#44AF69',
+                           '#F8333C',
+                           '#FCAB10',
+                           '#2B9EB3',
+                           '#DBD5B5'],
+                    opacity=0.7
+                ),
+                text=dp.get_mostPopularSubscriberEndPathList(5),
+            ),
+            Scattermapbox(
+                lat=dp.get_mostPopularCustomerEndPathLatList(5),
+                lon=dp.get_mostPopularCustomerEndPathLonList(5),
+                mode='markers',
+                marker=Marker(
+                    size=12,
+                    color=['#FF8360',
+                               '#E8E288',
+                               '#7DCE82',
+                               '#3CDBD3',
+                               '#00FFF5'],
+                    opacity=0.7
+                ),
+                text=dp.get_mostPopularCustomerEndPathList(5),
+            ),
 
         ]
 
@@ -247,12 +372,28 @@ def updateGraph2OnMapMove(relayoutData):
                             {'x': d.get_mostPopularCustomerPathList(5),
                              'y': d.get_mostPopularCustomerPathCountList(5),
                              'type': 'bar',
-                             'name': 'Customer'
+                             'name': 'Customer',
+                             'marker': dict(
+                                 color=['#FF8360',
+                                        '#E8E288',
+                                        '#7DCE82',
+                                        '#3CDBD3',
+                                        '#00FFF5']
+                             )
+
                              },
                             {'x': d.get_mostPopularSubscriberPathList(5),
                              'y': d.get_mostPopularSubscriberPathCountList(5),
                              'type': 'bar',
-                             'name': 'Subscriber'
+                             'name': 'Subscriber',
+                             'marker': dict(
+                                 color=['#44AF69',
+                                        '#F8333C',
+                                        '#FCAB10',
+                                        '#2B9EB3',
+                                        '#DBD5B5']
+                             )
+
                              },
                         ],
         'layout': {
