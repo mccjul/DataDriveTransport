@@ -23,58 +23,14 @@ data = [
                 lon=dataAnalyzer.get_allBikePostsLongitude(),
                 mode='markers',
                 marker=Marker(
-<<<<<<< HEAD
                     size=8,
                     color='rgb(255, 0, 0)',
                     opacity=0.7
-=======
-                    size=8
->>>>>>> parent of 1a55d72... trying to display loops
                 ),
                 text=dataAnalyzer.get_allBikePostsName(),
             )
         ]
-for p in dataAnalyzer.get_allPaths():
-    result = Scattermapbox(
-                lat=(p[0].location[0], p[1].location[0]),
-                lon=(p[0].location[1], p[1].location[1]),
-                mode='lines',
-                line=Line(
-<<<<<<< HEAD
-                    width=2
-                ),
-                opacity=0.7,
-            )
-        data.append(result)
-    if p.startBikepost == p.endBikepost:
-        loopPathList.append(p)
 
-
-pathLatList = []
-pathLonList = []
-
-for path in loopPathList:
-    pathLatList.append(path.startBikepost.location[0])
-    pathLonList.append(path.startBikepost.location[1])
-
-data.append(
-    Scattermapbox(
-            lat=pathLatList,
-            lon=pathLonList,
-            mode='markers',
-            marker=Marker(
-                size=12,
-                color='rgb(242, 177, 172)',
-                opacity=0.5
-            )
-        ))
-=======
-                    width=1
-                ),
-                opacity=0.7,
-            )
-    data.append(result)
->>>>>>> parent of 1a55d72... trying to display loops
 
 app.layout = html.Div(children=[
     html.Div([
