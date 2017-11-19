@@ -7,6 +7,8 @@ import plotly.plotly as py
 from plotly import graph_objs as go
 from plotly.graph_objs import *
 import util
+import dataparser
+
 
 app = dash.Dash()
 
@@ -14,21 +16,27 @@ lat = 40.7272
 lon = -73.991251
 zoom = 12.0
 
-mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
+rangemap = {
+    'N': 40.758924,
+    'S': 40.679543,
+    'W':-74.047536,
+    'E': -73.888193
+}
+dataparser = dataparser.Dataparser(rangemap)
 
-loopPathList = []
+mapbox_access_token = 'pk.eyJ1IjoiYWxpc2hvYmVpcmkiLCJhIjoiY2ozYnM3YTUxMDAxeDMzcGNjbmZyMmplZiJ9.ZjmQ0C2MNs1AzEBC_Syadg'
 
 data = [
             Scattermapbox(
-                lat=dataAnalyzer.get_allBikePostsLatitude(),
-                lon=dataAnalyzer.get_allBikePostsLongitude(),
+                lat=dataparser.get_allBikePostsLatitudeList(),
+                lon=dataparser.get_allBikePostsLongitudeList(),
                 mode='markers',
                 marker=Marker(
                     size=8,
                     color='rgb(255, 0, 0)',
                     opacity=0.7
                 ),
-                text=dataAnalyzer.get_allBikePostsName(),
+                text=dataparser.get_allBikePostsNameList(),
             )
         ]
 
@@ -99,8 +107,16 @@ app.layout = html.Div(children=[
                     id='example-graph2',
                     figure={
                         'data': [
-                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
-                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': u'Montréal'},
+                            {'x': dataparser.get_mostPopularCustomerPathList(5),
+                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Customer'
+                             },
+                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
+                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Subscriber'
+                             },
                         ],
                         'layout': {
                             'title': 'Chart 2',
@@ -167,10 +183,22 @@ def updateGraph1OnMapMove(relayoutData):
               [Event('map-graph', 'relayout')])
 def updateGraph2OnMapMove(relayoutData):
     res = boundBox(relayoutData)
+    dataparser.set_dfRangeBikepost(res)
+    print(res)
+
     return {
         'data': [
-            {'x': [1, 2, 3], 'y': [2, 1, 2], 'type': 'bar', 'name': 'SF'},
-        ],
+                            {'x': dataparser.get_mostPopularCustomerPathList(5),
+                             'y': dataparser.get_mostPopularCustomerPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Customer'
+                             },
+                            {'x': dataparser.get_mostPopularSubscriberPathList(5),
+                             'y': dataparser.get_mostPopularSubscriberPathCountList(5),
+                             'type': 'bar',
+                             'name': 'Subscriber'
+                             },
+                        ],
         'layout': {
             'title': 'Chart 2',
             'height': '300',
